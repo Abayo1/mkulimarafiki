@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    
+</head>
+<body>
+    <header>
+        <h1>Our Services</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Services</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="services-container">
+            <ul class="services-list">
+                <li>
+                    <div class="service-box"><a href="#" onclick="loadService('crop_monitoring')">Crop Monitoring and Disease Detection</a></div>
+                </li>
+                <li>
+                    <div class="service-box"><a href="#" onclick="loadService('access_to_agri_inputs')">Access to Agri-inputs</a></div>
+                </li>
+                <li>
+                    <div class="service-box"><a href="#" onclick="loadService('market_access_pricing')">Market Access and Pricing</a></div>
+                </li>
+                <li>
+                    <div class="service-box"><a href="#" onclick="loadService('crop_insurance')">Crop Insurance</a></div>
+                </li>
+                <li>
+                    <div class="service-box"><a href="#" onclick="loadService('extension_officer')">Connect to Extension Officer</a></div>
+                </li>
+            </ul>
+        </div>
+        <div class="service-details" id="service-details">
+            <!-- Service details will be dynamically loaded here -->
+            <div id="overall-response" class="response"></div>
+        </div>
+    </main>
+    <footer>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/services">Services</a></li>
+        </ul>
+     
+        <address>P.O.Box 2533, Morogoro, Tanzania</address>
+    </footer>
+    
+    <script>
+        function loadService(serviceName) {
+            var serviceDetails = getServiceDetails(serviceName);
+            document.getElementById("service-details").innerHTML = serviceDetails;
+
+            // Reset the image display when loading a new service
+            var selectedImage = document.getElementById("selected-image");
+            if (selectedImage) {
+                selectedImage.src = "";
+                selectedImage.style.display = 'none';
+            }
+        }
+
+        function getServiceDetails(serviceName) {
+            var serviceDetails = {
+                "crop_monitoring": `<h2>Crop Monitoring and Disease Detection</h2>
+                                    <div id="tabs">
+                                        <button class="tablinks" onclick="openTab(event, 'selectImage')">Select an Image</button>
+                                        <button class="tablinks" onclick="openTab(event, 'takePicture')">Take a Picture</button>
+                                    </div>
+                                    <div id="selectImage" class="tabcontent">
+                                        <h3>Select an Image</h3>
+                                        <input type="file" id="imageInput" accept="image/*" onchange="showSelectedImage(event)">
+                                        <img id="selected-image" style="max-width: 100%; display: none;">
+                                        <button onclick="submitSelectedImage()">Submit</button>
+                                    </div>
+                                    <div id="takePicture" class="tabcontent">
+                                        <h3>Take a Picture</h3>
+                                        <button onclick="openCamera()">Open Camera</button>
+                                        <video id="camera-stream" style="max-width: 100%; display: none;" autoplay></video>
+                                        <button onclick="takePictureAndSubmit()">Take and Submit</button>
+                                    </div>
+                                    <div id="overall-response" class="response"></div>`,
+                "access_to_agri_inputs": `<h2>Access to Agri-inputs</h2>
+                                          <p>Find nearby agro shops, check current product prices, or search for specific agri-inputs.</p>
+                                          <div id="tabs">
+                                              <button class="tablinks" onclick="openTab(event, 'nearbyShops')">Nearby Agro Shops</button>
+                                              <button class="tablinks" onclick="openTab(event, 'productPrices')">Current Product Prices</button>
+                                              <button class="tablinks" onclick="openTab(event, 'searchAgriInput')">Search Agri-Input</button>
+                                          </div>
+                                          <div id="nearbyShops" class="tabcontent">
+                                              <h3>Nearby Agro Shops</h3>
+                                              <p>List of nearby agro shops will be displayed here.</p>
+                                          </div>
+                                          <div id="productPrices" class="tabcontent">
+                                              <h3>Current Product Prices</h3>
+                                              <p>Current product prices will be displayed here.</p>
+                                          </div>
+                                          <div id="searchAgriInput" class="tabcontent">
+                                              <h3>Search Agri-Input</h3>
+                                              <input type="text" id="agriInputSearch" placeholder="Enter agri-input name">
+                                              <button onclick="searchAgriInput()">Search</button>
+                                              <div id="agriInputResults"></div>
+                                          </div>
+                                          <div id="overall-response" class="response"></div>`,
+                "market_access_pricing": `<h2>Market Access and Pricing</h2>
+                                          <p>Get information on market access and pricing options.</p>
+                                          <div id="tabs">
+                                              <button class="tablinks" onclick="openTab(event, 'marketAccess')">Market Access</button>
+                                              <button class="tablinks" onclick="openTab(event, 'pricingOptions')">Pricing Options</button>
+                                          </div>
+                                          <div id="marketAccess" class="tabcontent">
+                                              <h3>Market Access</h3>
+                                              <p>Details on market access will be displayed here.</p>
+                                          </div>
+                                          <div id="pricingOptions" class="tabcontent">
+                                              <h3>Pricing Options</h3>
+                                              <p>Details on pricing options will be displayed here.</p>
+                                          </div>`,
+                "crop_insurance": `<h2>Crop Insurance</h2>
+                                   <p>Details for crop insurance will be displayed here.</p>
+                                   <div id="tabs">
+                                       <button class="tablinks" onclick="openTab(event, 'insuranceDetails')">Insurance Details</button>
+                                       <button class="tablinks" onclick="openTab(event, 'applyInsurance')">Apply for Insurance</button>
+                                   </div>
+                                   <div id="insuranceDetails" class="tabcontent">
+                                       <h3>Insurance Details</h3>
+                                       <p>Details about available crop insurance policies.</p>
+                                   </div>
+                                   <div id="applyInsurance" class="tabcontent">
+                                       <h3>Apply for Insurance</h3>
+                                       <p>Form to apply for crop insurance will be available here.</p>
+                                   </div>`,
+                "extension_officer": `<h2>Connect to Extension Officer</h2>
+                                      <p>Connect with an extension officer for agricultural support.</p>
+                                      <div id="tabs">
+                                          <button class="tablinks" onclick="openTab(event, 'findOfficer')">Find an Officer</button>
+                                          <button class="tablinks" onclick="openTab(event, 'requestSupport')">Request Support</button>
+                                      </div>
+                                      <div id="findOfficer" class="tabcontent">
+                                          <h3>Find an Officer</h3>
+                                          <p>Information on how to find an extension officer.</p>
+                                      </div>
+                                      <div id="requestSupport" class="tabcontent">
+                                          <h3>Request Support</h3>
+                                          <p>Form to request support from an extension officer.</p>
+                                      </div>`
+            };
+            return serviceDetails[serviceName];
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // show selected image
+        function showSelectedImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('selected-image');
+                output.src = reader.result;
+                output.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // submit selected image
+        async function submitSelectedImage() {
+            var selectedImage = document.getElementById('imageInput').files[0];
+            if (selectedImage) {
+                var formData = new FormData();
+                formData.append("file", selectedImage);
+
+                // backend for prediction
+                var response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                var result = await response.json();
+                var overallResponse = document.getElementById('overall-response');
+                overallResponse.innerHTML = '<p>Predicted plant: ' + result.predicted_plant + '</p><p>Predicted disease: ' + result.predicted_disease + '</p>';
+            } else {
+                alert("Please select an image first.");
+            }
+        }
+
+        // open camera
+        function openCamera() {
+            var constraints = {
+                video: true
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function (mediaStream) {
+                    var video = document.getElementById('camera-stream');
+                    video.srcObject = mediaStream;
+                    video.play();
+                    video.style.display = 'block';
+                })
+                .catch(function (err) {
+                    console.log('Error accessing the camera:', err);
+                });
+        }
+
+        // take picture and submit
+        async function takePictureAndSubmit() {
+            var canvas = document.createElement('canvas');
+            var video = document.getElementById('camera-stream');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imgDataUrl = canvas.toDataURL('image/jpeg');
+
+            // Convert data URL to Blob
+            var blob = await fetch(imgDataUrl).then(res => res.blob());
+            var formData = new FormData();
+            formData.append("file", blob, "captured.jpg");
+
+            // Send the captured image to the backend for prediction
+            var response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            var result = await response.json();
+            var overallResponse = document.getElementById('overall-response');
+            overallResponse.innerHTML = '<p>Predicted plant: ' + result.predicted_plant + '</p><p>Predicted disease: ' + result.predicted_disease + '</p>';
+        }
+
+        // search agri-input
+        function searchAgriInput() {
+            var input = document.getElementById('agriInputSearch').value;
+            var agriInputResults = document.getElementById('agriInputResults');
+            if (input) {
+                // function to search agri-input
+                agriInputResults.innerHTML = '<p>Searching for: ' + input + '</p>';
+                
+                // Simulate a search result
+                setTimeout(function () {
+                    agriInputResults.innerHTML = '<p>Found agri-input: Example Input</p>';
+                }, 2000); 
+            } else {
+                alert("Please enter an agri-input name.");
+            }
+        }
+
+        // service details
+        loadService('crop_monitoring');
+    </script>
+</body>
+</html>
+
